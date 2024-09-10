@@ -231,6 +231,7 @@ export const getInputVariables = (paramValue: string): string[] => {
     const inputVariables = []
     let startIdx = 0
     const endIdx = returnVal.length
+
     while (startIdx < endIdx) {
         const substr = returnVal.substring(startIdx, startIdx + 1)
         // Check for escaped curly brackets
@@ -238,8 +239,8 @@ export const getInputVariables = (paramValue: string): string[] => {
             startIdx += 2 // Skip the escaped bracket
             continue
         }
-        // Store the opening double curly bracket
-        if (substr === '{') {
+        // Store the opening curly bracket if followed by an alphanumeric character
+        if (substr === '{' && startIdx + 1 < endIdx && /[a-zA-Z0-9]/.test(returnVal[startIdx + 1])) {
             variableStack.push({ substr, startIdx: startIdx + 1 })
         }
         // Found the complete variable
